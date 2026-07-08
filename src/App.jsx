@@ -337,9 +337,9 @@ export default function App() {
           <div className="vc-card" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
             <div className="vc-card-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>原始聊天记录</h2>
-              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+              <div style={{ display: "flex", gap: 6, alignItems: "center", flexWrap: "wrap" }}>
                 <span style={{ fontSize: 11, color: "var(--vc-mute)", marginRight: 4 }}>极速标记:</span>
-                {["老板", "顾问", "客户", "我"].map(role => (
+                {(selectedRoles.length > 0 ? selectedRoles : PREDEFINED_ROLES).map(role => (
                   <button key={role} onClick={() => handleQuickAssign(role)}
                     style={{ padding: "4px 8px", fontSize: 11, borderRadius: "var(--radius-sm)", border: "1px solid var(--vc-hairline)", background: "var(--vc-canvas)", color: "var(--vc-ink)", cursor: "pointer", transition: "all 0.2s" }}>
                     {role}
