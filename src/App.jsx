@@ -104,14 +104,6 @@ const TYPES = [
   },
 ];
 
-const inputStyle = {
-  fontSize: 13, padding: "6px 10px", borderRadius: "var(--border-radius-md)",
-  border: "0.5px solid var(--color-border-secondary)",
-  background: "var(--color-background-secondary)",
-  color: "var(--color-text-primary)", outline: "none",
-  width: "100%", boxSizing: "border-box",
-};
-
 function parseWeChat(raw) {
   if (!raw.trim()) return [];
   const lines = raw.split(/\r?\n/);
@@ -255,78 +247,66 @@ export default function App() {
   };
 
   return (
-    <div style={{ padding: "1.25rem 0", fontFamily: "var(--font-sans)" }}>
-      <h2 style={{ fontSize: 18, fontWeight: 500, margin: "0 0 4px", color: "var(--color-text-primary)" }}>
-        微信聊天记录格式化工具
-      </h2>
-      <p style={{ fontSize: 13, color: "var(--color-text-secondary)", margin: "0 0 1.25rem" }}>
-        粘贴文字 → 生成 Markdown → 补充媒体内容 → 打包下载归档文件夹 (.zip)
-      </p>
+    <div className="vc-page-container">
+      <div className="vc-header-band">
+        <h1>微信聊天记录格式化工具</h1>
+        <p>粘贴文字 → 生成 Markdown → 补充媒体内容 → 打包下载归档文件夹 (.zip)</p>
+      </div>
 
-      <div style={{ display: "grid", gridTemplateColumns: "minmax(0,1fr) minmax(0,1fr)", gap: 16 }}>
+      <div className="app-grid">
         {/* Left */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          <div style={{ background: "var(--color-background-primary)", border: "0.5px solid var(--color-border-tertiary)", borderRadius: "var(--border-radius-lg)", padding: "1rem" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-              <p style={{ fontSize: 12, fontWeight: 500, color: "var(--color-text-secondary)", margin: 0, textTransform: "uppercase", letterSpacing: ".05em" }}>元数据</p>
-              
-              <div style={{ display: "flex", gap: 0, border: "0.5px solid var(--color-border-secondary)", borderRadius: "var(--border-radius-md)", overflow: "hidden" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div className="vc-card">
+            <div className="vc-card-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>元数据</h2>
+              <div style={{ display: "flex", background: "var(--vc-canvas-soft)", padding: 2, borderRadius: "var(--radius-sm)", border: "1px solid var(--vc-hairline)" }}>
                 <button 
                   onClick={() => updateMeta("chatType", "single")}
-                  style={{ padding: "4px 10px", fontSize: 12, border: "none", background: meta.chatType === "single" ? "var(--color-background-secondary)" : "transparent", cursor: "pointer", fontWeight: meta.chatType === "single" ? 600 : 400 }}>
+                  style={{ padding: "4px 12px", fontSize: 13, border: "none", background: meta.chatType === "single" ? "var(--vc-canvas)" : "transparent", cursor: "pointer", fontWeight: 500, borderRadius: "var(--radius-xs)", boxShadow: meta.chatType === "single" ? "0 1px 2px rgba(0,0,0,0.05)" : "none", color: meta.chatType === "single" ? "var(--vc-ink)" : "var(--vc-mute)" }}>
                   单聊
                 </button>
                 <button 
                   onClick={() => updateMeta("chatType", "group")}
-                  style={{ padding: "4px 10px", fontSize: 12, border: "none", borderLeft: "0.5px solid var(--color-border-secondary)", background: meta.chatType === "group" ? "var(--color-background-secondary)" : "transparent", cursor: "pointer", fontWeight: meta.chatType === "group" ? 600 : 400 }}>
+                  style={{ padding: "4px 12px", fontSize: 13, border: "none", background: meta.chatType === "group" ? "var(--vc-canvas)" : "transparent", cursor: "pointer", fontWeight: 500, borderRadius: "var(--radius-xs)", boxShadow: meta.chatType === "group" ? "0 1px 2px rgba(0,0,0,0.05)" : "none", color: meta.chatType === "group" ? "var(--vc-ink)" : "var(--vc-mute)" }}>
                   群聊
                 </button>
               </div>
             </div>
             
-            <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 8, marginBottom: 12 }}>
-              <input type="text" placeholder={meta.chatType === "single" ? "聊天对象 (例: 张三)" : "群名称 (例: VIP咨询群)"} 
+            <div className="form-row">
+              <input type="text" className="vc-input" placeholder={meta.chatType === "single" ? "聊天对象 (例: 张三)" : "群名称 (例: VIP咨询群)"} 
                 value={meta.targetName} onChange={e => updateMeta("targetName", e.target.value)} 
-                style={{ ...inputStyle, gridColumn: "1/-1" }} />
-              <input type="text" placeholder="日期 2025-05-14" value={meta.date} onChange={e => updateMeta("date", e.target.value)} style={inputStyle} />
-              <input type="text" placeholder="主题" value={meta.topic} onChange={e => updateMeta("topic", e.target.value)} style={inputStyle} />
-              <input type="text" placeholder="标签（逗号分隔）" value={meta.tags} onChange={e => updateMeta("tags", e.target.value)} style={{ ...inputStyle, gridColumn: "1/-1" }} />
+                style={{ gridColumn: "1/-1" }} />
+              <input type="text" className="vc-input" placeholder="日期 2025-05-14" value={meta.date} onChange={e => updateMeta("date", e.target.value)} />
+              <input type="text" className="vc-input" placeholder="主题" value={meta.topic} onChange={e => updateMeta("topic", e.target.value)} />
+              <input type="text" className="vc-input" placeholder="标签（逗号分隔）" value={meta.tags} onChange={e => updateMeta("tags", e.target.value)} style={{ gridColumn: "1/-1" }} />
             </div>
 
             <div>
-              <p style={{ fontSize: 11, color: "var(--color-text-secondary)", marginBottom: 6 }}>参与者身份分类 (可多选)</p>
-              <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+              <span className="vc-label" style={{ fontSize: 12, color: "var(--vc-mute)" }}>参与者身份分类 (可多选)</span>
+              <div className="vc-tag-group">
                 {PREDEFINED_ROLES.map(role => (
-                  <label key={role} style={{ 
-                    display: "flex", alignItems: "center", gap: 4, 
-                    fontSize: 11, cursor: "pointer", padding: "4px 8px",
-                    borderRadius: "var(--border-radius-md)",
-                    border: selectedRoles.includes(role) ? "0.5px solid #0F6E56" : "0.5px solid var(--color-border-secondary)",
-                    background: selectedRoles.includes(role) ? "#E1F5EE" : "transparent",
-                    color: selectedRoles.includes(role) ? "#0F6E56" : "var(--color-text-secondary)"
-                  }}>
-                    <input type="checkbox" style={{ display: "none" }}
-                      checked={selectedRoles.includes(role)} 
-                      onChange={() => toggleRole(role)} />
-                    {role}
+                  <label key={role} className="vc-tag-label">
+                    <input type="checkbox" checked={selectedRoles.includes(role)} onChange={() => toggleRole(role)} />
+                    <span className="vc-tag">{role}</span>
                   </label>
                 ))}
               </div>
             </div>
           </div>
 
-          <div style={{ background: "var(--color-background-primary)", border: "0.5px solid var(--color-border-tertiary)", borderRadius: "var(--border-radius-lg)", padding: "1rem", flex: 1 }}>
-            <p style={{ fontSize: 12, fontWeight: 500, color: "var(--color-text-secondary)", margin: "0 0 8px", textTransform: "uppercase", letterSpacing: ".05em" }}>原始聊天记录</p>
-            <textarea value={raw} onChange={e => setRaw(e.target.value)}
+          <div className="vc-card" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <div className="vc-card-header">
+              <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>原始聊天记录</h2>
+            </div>
+            <textarea className="vc-textarea" value={raw} onChange={e => setRaw(e.target.value)}
               placeholder={"从微信PC版复制粘贴聊天记录\n\n支持格式：\n顾问小王 10:02\n这个学校环境很好\n\n学员张同学 10:05\n有没有纯会话的课？"}
-              style={{ ...inputStyle, minHeight: 200, fontFamily: "var(--font-mono)", lineHeight: 1.6, resize: "vertical", display: "block" }} />
-            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-              <button onClick={generate}
-                style={{ flex: 1, padding: "8px 12px", fontSize: 13, fontWeight: 500, borderRadius: "var(--border-radius-md)", border: "0.5px solid #0F6E56", background: "#E1F5EE", color: "#0F6E56", cursor: "pointer" }}>
-                <i className="ti ti-sparkles" aria-hidden="true" style={{ marginRight: 6 }} />生成 Markdown
+              style={{ flex: 1, minHeight: 200, fontFamily: "var(--font-mono)", resize: "vertical", marginBottom: 16 }} />
+            <div style={{ display: "flex", gap: 12 }}>
+              <button className="vc-btn vc-btn-primary" onClick={generate} style={{ flex: 1 }}>
+                <i className="ti ti-sparkles" aria-hidden="true" />生成 Markdown
               </button>
-              <button onClick={() => { setRaw(""); setOutput(""); setCounts({}); setSelectedRoles([]); updateMeta("targetName", ""); updateMeta("topic", ""); closeForm(); }}
-                style={{ padding: "8px 12px", fontSize: 13, borderRadius: "var(--border-radius-md)", border: "0.5px solid var(--color-border-secondary)", background: "transparent", color: "var(--color-text-secondary)", cursor: "pointer" }}>
+              <button className="vc-btn vc-btn-secondary" onClick={() => { setRaw(""); setOutput(""); setCounts({}); setSelectedRoles([]); updateMeta("targetName", ""); updateMeta("topic", ""); closeForm(); }} aria-label="Clear">
                 <i className="ti ti-trash" aria-hidden="true" />
               </button>
             </div>
@@ -334,75 +314,76 @@ export default function App() {
         </div>
 
         {/* Right */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {/* Media panel */}
-          <div style={{ background: "var(--color-background-primary)", border: "0.5px solid var(--color-border-tertiary)", borderRadius: "var(--border-radius-lg)", padding: "1rem" }}>
-            <p style={{ fontSize: 12, fontWeight: 500, color: "var(--color-text-secondary)", margin: "0 0 8px", textTransform: "uppercase", letterSpacing: ".05em" }}>插入媒体占位符 (生成 assets 路径)</p>
-            <div style={{ display: "flex", flexWrap: "wrap", gap: 6 }}>
+          <div className="vc-card">
+            <div className="vc-card-header">
+              <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>插入媒体占位符</h2>
+            </div>
+            <div className="vc-tag-group">
               {TYPES.map(t => (
                 <button key={t.key}
                   onClick={() => activeType?.key === t.key ? closeForm() : openForm(t)}
                   disabled={!output}
-                  style={{ display: "flex", alignItems: "center", gap: 5, padding: "5px 10px", fontSize: 12, fontWeight: 500,
-                    borderRadius: "var(--border-radius-md)",
-                    border: `0.5px solid ${t.color}${activeType?.key === t.key ? "bb" : "44"}`,
-                    background: activeType?.key === t.key ? `${t.color}22` : `${t.color}0e`,
-                    color: t.color, cursor: output ? "pointer" : "not-allowed", opacity: output ? 1 : 0.4,
-                    outline: activeType?.key === t.key ? `1.5px solid ${t.color}55` : "none" }}>
-                  <i className={`ti ${t.icon}`} aria-hidden="true" style={{ fontSize: 14 }} />
+                  style={{ 
+                    display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", fontSize: 13, fontWeight: 500,
+                    borderRadius: "var(--radius-pill)",
+                    border: `1px solid ${activeType?.key === t.key ? t.color : "var(--vc-hairline)"}`,
+                    background: activeType?.key === t.key ? `${t.color}11` : "var(--vc-canvas)",
+                    color: activeType?.key === t.key ? t.color : "var(--vc-ink)", 
+                    cursor: output ? "pointer" : "not-allowed", opacity: output ? 1 : 0.5,
+                    transition: "all 0.2s", outline: "none"
+                  }}>
+                  <i className={`ti ${t.icon}`} aria-hidden="true" style={{ fontSize: 14, color: t.color }} />
                   {t.label}
                 </button>
               ))}
             </div>
 
             {!output && (
-              <p style={{ fontSize: 11, color: "var(--color-text-tertiary)", margin: "8px 0 0" }}>
-                先点「生成 Markdown」，再回到这里插入媒体内容
-              </p>
+              <p className="vc-hint">先点「生成 Markdown」，再回到这里插入媒体内容</p>
             )}
 
             {/* Inline form */}
             {activeType && (
-              <div style={{ marginTop: 12, padding: "12px", background: "var(--color-background-secondary)", borderRadius: "var(--border-radius-md)", border: `0.5px solid ${activeType.color}44` }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 10 }}>
-                  <span style={{ fontSize: 13, fontWeight: 500, color: activeType.color, display: "flex", alignItems: "center", gap: 6 }}>
+              <div style={{ marginTop: 16, padding: "16px", background: "var(--vc-canvas-soft)", borderRadius: "var(--radius-md)", border: `1px solid var(--vc-hairline)` }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                  <span style={{ fontSize: 14, fontWeight: 600, color: activeType.color, display: "flex", alignItems: "center", gap: 6 }}>
                     <i className={`ti ${activeType.icon}`} aria-hidden="true" />{activeType.label}
                   </span>
-                  <span style={{ fontSize: 11, color: "var(--color-text-tertiary)", maxWidth: 180, textAlign: "right", lineHeight: 1.4 }}>{activeType.hint}</span>
+                  <span style={{ fontSize: 12, color: "var(--vc-mute)", maxWidth: 180, textAlign: "right" }}>{activeType.hint}</span>
                 </div>
 
-                <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
                   {activeType.fields.map(f => (
                     <div key={f.k}>
-                      <label style={{ fontSize: 11, color: "var(--color-text-secondary)", display: "block", marginBottom: 3 }}>{f.label}</label>
+                      <label className="vc-label">{f.label}</label>
                       {f.type === "textarea"
-                        ? <textarea rows={f.rows || 3} placeholder={f.ph}
+                        ? <textarea className="vc-textarea" rows={f.rows || 3} placeholder={f.ph}
                             value={formData[f.k] || ""}
                             onChange={e => setFormData(d => ({ ...d, [f.k]: e.target.value }))}
-                            style={{ ...inputStyle, resize: "vertical", fontFamily: "var(--font-sans)", lineHeight: 1.5, display: "block" }} />
-                        : <input type="text" placeholder={f.ph}
+                            style={{ resize: "vertical" }} />
+                        : <input className="vc-input" type="text" placeholder={f.ph}
                             value={formData[f.k] || ""}
-                            onChange={e => setFormData(d => ({ ...d, [f.k]: e.target.value }))}
-                            style={inputStyle} />
+                            onChange={e => setFormData(d => ({ ...d, [f.k]: e.target.value }))} />
                       }
                     </div>
                   ))}
                 </div>
 
                 {preview && (
-                  <div style={{ marginTop: 10, padding: "8px 10px", background: "var(--color-background-primary)", borderRadius: "var(--border-radius-md)", border: "0.5px solid var(--color-border-tertiary)" }}>
-                    <p style={{ fontSize: 10, color: "var(--color-text-tertiary)", margin: "0 0 4px", textTransform: "uppercase", letterSpacing: ".05em" }}>预览 (标准化路径)</p>
-                    <pre style={{ fontSize: 11, fontFamily: "var(--font-mono)", color: "var(--color-text-secondary)", margin: 0, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{preview}</pre>
+                  <div style={{ marginTop: 16, padding: "12px", background: "var(--vc-canvas)", borderRadius: "var(--radius-md)", border: "1px solid var(--vc-hairline)" }}>
+                    <p style={{ fontSize: 11, color: "var(--vc-mute)", margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600 }}>预览 (标准化路径)</p>
+                    <pre style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--vc-body)", margin: 0, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{preview}</pre>
                   </div>
                 )}
 
-                <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
-                  <button onClick={doInsert}
-                    style={{ flex: 1, padding: "7px 12px", fontSize: 13, fontWeight: 500, borderRadius: "var(--border-radius-md)", border: `0.5px solid ${activeType.color}`, background: `${activeType.color}18`, color: activeType.color, cursor: "pointer" }}>
-                    <i className="ti ti-plus" aria-hidden="true" style={{ marginRight: 5 }} />插入到光标位置
+                <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+                  <button className="vc-btn" onClick={doInsert}
+                    style={{ flex: 1, background: activeType.color, color: "#fff" }}>
+                    <i className="ti ti-plus" aria-hidden="true" />插入到光标位置
                   </button>
-                  <button onClick={closeForm}
-                    style={{ padding: "7px 12px", fontSize: 13, borderRadius: "var(--border-radius-md)", border: "0.5px solid var(--color-border-secondary)", background: "transparent", color: "var(--color-text-secondary)", cursor: "pointer" }}>
+                  <button className="vc-btn vc-btn-secondary" onClick={closeForm}>
                     取消
                   </button>
                 </div>
@@ -411,32 +392,29 @@ export default function App() {
           </div>
 
           {/* Output */}
-          <div style={{ background: "var(--color-background-primary)", border: "0.5px solid var(--color-border-tertiary)", borderRadius: "var(--border-radius-lg)", padding: "1rem", flex: 1 }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 8 }}>
-              <p style={{ fontSize: 12, fontWeight: 500, color: "var(--color-text-secondary)", margin: 0, textTransform: "uppercase", letterSpacing: ".05em" }}>Markdown 输出</p>
+          <div className="vc-card" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
+            <div className="vc-card-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>Markdown 输出</h2>
               {stats && (
-                <div style={{ display: "flex", gap: 6 }}>
+                <div style={{ display: "flex", gap: 8 }}>
                   {[{ l: "消息", v: stats.msgs }, { l: "媒体", v: stats.media }, { l: "字符", v: stats.chars }].map(s => (
-                    <span key={s.l} style={{ fontSize: 11, color: "var(--color-text-tertiary)", background: "var(--color-background-secondary)", padding: "2px 6px", borderRadius: 4 }}>
-                      {s.l} {s.v}
+                    <span key={s.l} style={{ fontSize: 12, color: "var(--vc-body)", background: "var(--vc-canvas-soft)", padding: "2px 8px", borderRadius: "var(--radius-sm)", border: "1px solid var(--vc-hairline)" }}>
+                      {s.l} <strong style={{ color: "var(--vc-ink)", fontWeight: 600 }}>{s.v}</strong>
                     </span>
                   ))}
                 </div>
               )}
             </div>
-            <textarea ref={outputRef} value={output} onChange={e => setOutput(e.target.value)}
+            
+            <textarea ref={outputRef} className="vc-markdown-output" value={output} onChange={e => setOutput(e.target.value)}
               onMouseUp={() => { if (outputRef.current) cursorRef.current = outputRef.current.selectionStart; }}
               onKeyUp={() => { if (outputRef.current) cursorRef.current = outputRef.current.selectionStart; }}
               placeholder={"生成后的 Markdown 会出现在这里\n\n先点「生成 Markdown」，然后在想插入的位置点击定位光标，再点上方媒体按钮填写内容…"}
-              style={{ ...inputStyle, minHeight: 220, fontFamily: "var(--font-mono)", fontSize: 12, lineHeight: 1.7, resize: "vertical", display: "block" }} />
+              style={{ flex: 1, resize: "vertical", marginBottom: 16, outline: "none", width: "100%", boxSizing: "border-box" }} />
             
-            <div style={{ display: "flex", gap: 8, marginTop: 8 }}>
-              <button disabled={!output} onClick={downloadZip}
-                style={{ flex: 1, display: "flex", alignItems: "center", justifyContent: "center", gap: 6, padding: "8px 12px", fontSize: 13, fontWeight: 500, borderRadius: "var(--border-radius-md)", border: "0.5px solid var(--color-border-secondary)", background: output ? "var(--green-bg, #E1F5EE)" : "var(--color-background-secondary)", color: output ? "var(--green, #0F6E56)" : "var(--color-text-primary)", cursor: output ? "pointer" : "not-allowed", opacity: output ? 1 : 0.4 }}>
-                <i className="ti ti-file-zip" aria-hidden="true" style={{ fontSize: 16 }} />
-                打包下载归档文件夹 (.zip)
-              </button>
-            </div>
+            <button className="vc-btn vc-btn-primary" disabled={!output} onClick={downloadZip} style={{ width: "100%", opacity: output ? 1 : 0.4 }}>
+              <i className="ti ti-file-zip" aria-hidden="true" />打包下载归档文件夹 (.zip)
+            </button>
           </div>
         </div>
       </div>

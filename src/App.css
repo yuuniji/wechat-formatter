@@ -1,12 +1,42 @@
-:root {
-  --color-text-primary: #1a1a1a;
-  --color-text-secondary: #666;
-  --color-text-tertiary: #999;
-  --color-background-primary: #fff;
-  --color-background-secondary: #f5f5f5;
-  --color-border-tertiary: rgba(0, 0, 0, 0.12);
-  --color-border-secondary: rgba(0, 0, 0, 0.2);
-  --font-mono: 'Courier New', monospace;
-  --border-radius-md: 8px;
-  --border-radius-lg: 12px;
+/* App specific layout styles */
+
+.app-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .app-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.form-group {
+  margin-bottom: 24px;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 16px;
+}
+
+/* Custom scrollbar for textareas */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--vc-canvas-soft-2); 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--vc-hairline-strong); 
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--vc-mute); 
 }
