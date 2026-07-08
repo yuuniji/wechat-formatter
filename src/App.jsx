@@ -111,6 +111,7 @@ function parseWeChat(raw) {
   let current = null;
   const nameTimePattern = /^(.+?)\s+(\d{1,2}:\d{2}(?::\d{2})?)\s*$/;
   const timeOnlyPattern = /^(\d{4}-\d{2}-\d{2}\s+)?(\d{1,2}:\d{2}(?::\d{2})?)$/;
+  const iphonePattern = /^(.+?)[:：]\s*(.*)$/;
   for (let i = 0; i < lines.length; i++) {
     const trimmed = lines[i].trim();
     if (!trimmed) {
@@ -128,6 +129,15 @@ function parseWeChat(raw) {
       if (current) messages.push(current);
       current = { sender: lines[i + 1]?.trim() || "?", time: m2[2], content: [] };
       i++;
+      continue;
+    }
+    const m3 = trimmed.match(iphonePattern);
+    if (m3) {
+      if (current) messages.push(current);
+      current = { sender: m3[1].trim(), time: "", content: [] };
+      if (m3[2].trim()) {
+        current.content.push(m3[2].trim());
+      }
       continue;
     }
     if (current) current.content.push(trimmed);
@@ -169,6 +179,7 @@ export default function App() {
   const [formData, setFormData] = useState({});
   const cursorRef = useRef(0);
   const outputRef = useRef(null);
+  const rawRef = useRef(null);
 
   const updateMeta = (k, v) => setMeta(m => ({ ...m, [k]: v }));
   
@@ -186,6 +197,34 @@ export default function App() {
     setFormData({});
   };
   const closeForm = () => { setActiveType(null); setFormData({}); };
+
+  const handleQuickAssign = (role) => {
+    if (!rawRef.current) return;
+    const el = rawRef.current;
+    const start = el.selectionStart;
+    const end = el.selectionEnd;
+    const text = raw;
+
+    let lineStart = text.lastIndexOf('\n', start - 1) + 1;
+    let lineEnd = text.indexOf('\n', end);
+    if (lineEnd === -1) lineEnd = text.length;
+
+    const selectedLinesText = text.substring(lineStart, lineEnd);
+    const modifiedLines = selectedLinesText.split('\n').map(line => {
+      // Remove any existing quick-mark prefix like "老板: " if the user is changing their mind
+      const cleanLine = line.replace(/^.*?[:：]\s*/, '');
+      return cleanLine.trim() ? `${role}: ${cleanLine}` : line;
+    }).join('\n');
+
+    const newRaw = text.substring(0, lineStart) + modifiedLines + text.substring(lineEnd);
+    setRaw(newRaw);
+
+    setTimeout(() => {
+      el.focus();
+      el.selectionStart = lineStart + modifiedLines.length;
+      el.selectionEnd = lineStart + modifiedLines.length;
+    }, 0);
+  };
 
   const doInsert = () => {
     const n = (counts[activeType.key] || 0) + 1;
@@ -296,11 +335,20 @@ export default function App() {
           </div>
 
           <div className="vc-card" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <div className="vc-card-header">
+            <div className="vc-card-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>原始聊天记录</h2>
+              <div style={{ display: "flex", gap: 6, alignItems: "center" }}>
+                <span style={{ fontSize: 11, color: "var(--vc-mute)", marginRight: 4 }}>极速标记:</span>
+                {["老板", "顾问", "客户", "我"].map(role => (
+                  <button key={role} onClick={() => handleQuickAssign(role)}
+                    style={{ padding: "4px 8px", fontSize: 11, borderRadius: "var(--radius-sm)", border: "1px solid var(--vc-hairline)", background: "var(--vc-canvas)", color: "var(--vc-ink)", cursor: "pointer", transition: "all 0.2s" }}>
+                    {role}
+                  </button>
+                ))}
+              </div>
             </div>
-            <textarea className="vc-textarea" value={raw} onChange={e => setRaw(e.target.value)}
-              placeholder={"从微信PC版复制粘贴聊天记录\n\n支持格式：\n顾问小王 10:02\n这个学校环境很好\n\n学员张同学 10:05\n有没有纯会话的课？"}
+            <textarea ref={rawRef} className="vc-textarea" value={raw} onChange={e => setRaw(e.target.value)}
+              placeholder={"从微信PC版复制粘贴聊天记录\n\n支持格式：\n顾问小王 10:02\n这个学校环境很好\n\n也可以直接粘贴手机纯文本：\n选中任意句子，点击上方极速标记按钮即可！"}
               style={{ flex: 1, minHeight: 200, fontFamily: "var(--font-mono)", resize: "vertical", marginBottom: 16 }} />
             <div style={{ display: "flex", gap: 12 }}>
               <button className="vc-btn vc-btn-primary" onClick={generate} style={{ flex: 1 }}>
