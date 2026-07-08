@@ -362,108 +362,101 @@ export default function App() {
         </div>
 
         {/* Right */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-          {/* Media panel */}
-          <div className="vc-card">
-            <div className="vc-card-header">
-              <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>插入媒体占位符</h2>
-            </div>
-            <div className="vc-tag-group">
+        <div className="vc-card" style={{ flex: 1, display: "flex", flexDirection: "column", height: "100%", padding: "24px" }}>
+          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
+            <h2 style={{ fontSize: 18, color: "var(--vc-ink)" }}>文档预览区</h2>
+            {stats && (
+              <div style={{ display: "flex", gap: 8 }}>
+                {[{ l: "消息", v: stats.msgs }, { l: "媒体", v: stats.media }, { l: "字符", v: stats.chars }].map(s => (
+                  <span key={s.l} style={{ fontSize: 12, color: "var(--vc-body)", background: "var(--vc-canvas-soft)", padding: "2px 8px", borderRadius: "var(--radius-sm)", border: "1px solid var(--vc-hairline)" }}>
+                    {s.l} <strong style={{ color: "var(--vc-ink)", fontWeight: 600 }}>{s.v}</strong>
+                  </span>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div style={{ display: "flex", alignItems: "center", gap: 8, paddingBottom: 16, borderBottom: "1px solid var(--vc-hairline)", marginBottom: 16 }}>
+            <span style={{ fontSize: 13, color: "var(--vc-mute)", fontWeight: 500 }}>插入占位符:</span>
+            <div className="vc-tag-group" style={{ flex: 1 }}>
               {TYPES.map(t => (
                 <button key={t.key}
                   onClick={() => activeType?.key === t.key ? closeForm() : openForm(t)}
                   disabled={!output}
                   style={{ 
-                    display: "flex", alignItems: "center", gap: 6, padding: "6px 12px", fontSize: 13, fontWeight: 500,
-                    borderRadius: "var(--radius-pill)",
-                    border: `1px solid ${activeType?.key === t.key ? t.color : "var(--vc-hairline)"}`,
-                    background: activeType?.key === t.key ? `${t.color}11` : "var(--vc-canvas)",
-                    color: activeType?.key === t.key ? t.color : "var(--vc-ink)", 
-                    cursor: output ? "pointer" : "not-allowed", opacity: output ? 1 : 0.5,
+                    display: "flex", alignItems: "center", gap: 4, padding: "4px 10px", fontSize: 13,
+                    borderRadius: "var(--radius-sm)", border: "none",
+                    background: activeType?.key === t.key ? `${t.color}15` : "transparent",
+                    color: activeType?.key === t.key ? t.color : "var(--vc-body)", 
+                    cursor: output ? "pointer" : "not-allowed", opacity: output ? 1 : 0.4,
                     transition: "all 0.2s", outline: "none"
                   }}>
-                  <i className={`ti ${t.icon}`} aria-hidden="true" style={{ fontSize: 14, color: t.color }} />
+                  <i className={`ti ${t.icon}`} aria-hidden="true" style={{ fontSize: 15, color: activeType?.key === t.key ? t.color : "var(--vc-mute)" }} />
                   {t.label}
                 </button>
               ))}
             </div>
-
-            {!output && (
-              <p className="vc-hint">先点「生成 Markdown」，再回到这里插入媒体内容</p>
-            )}
-
-            {/* Inline form */}
-            {activeType && (
-              <div style={{ marginTop: 16, padding: "16px", background: "var(--vc-canvas-soft)", borderRadius: "var(--radius-md)", border: `1px solid var(--vc-hairline)` }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
-                  <span style={{ fontSize: 14, fontWeight: 600, color: activeType.color, display: "flex", alignItems: "center", gap: 6 }}>
-                    <i className={`ti ${activeType.icon}`} aria-hidden="true" />{activeType.label}
-                  </span>
-                  <span style={{ fontSize: 12, color: "var(--vc-mute)", maxWidth: 180, textAlign: "right" }}>{activeType.hint}</span>
-                </div>
-
-                <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
-                  {activeType.fields.map(f => (
-                    <div key={f.k}>
-                      <label className="vc-label">{f.label}</label>
-                      {f.type === "textarea"
-                        ? <textarea className="vc-textarea" rows={f.rows || 3} placeholder={f.ph}
-                            value={formData[f.k] || ""}
-                            onChange={e => setFormData(d => ({ ...d, [f.k]: e.target.value }))}
-                            style={{ resize: "vertical" }} />
-                        : <input className="vc-input" type="text" placeholder={f.ph}
-                            value={formData[f.k] || ""}
-                            onChange={e => setFormData(d => ({ ...d, [f.k]: e.target.value }))} />
-                      }
-                    </div>
-                  ))}
-                </div>
-
-                {preview && (
-                  <div style={{ marginTop: 16, padding: "12px", background: "var(--vc-canvas)", borderRadius: "var(--radius-md)", border: "1px solid var(--vc-hairline)" }}>
-                    <p style={{ fontSize: 11, color: "var(--vc-mute)", margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600 }}>预览 (标准化路径)</p>
-                    <pre style={{ fontSize: 12, fontFamily: "var(--font-mono)", color: "var(--vc-body)", margin: 0, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{preview}</pre>
-                  </div>
-                )}
-
-                <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
-                  <button className="vc-btn" onClick={doInsert}
-                    style={{ flex: 1, background: activeType.color, color: "#fff" }}>
-                    <i className="ti ti-plus" aria-hidden="true" />插入到光标位置
-                  </button>
-                  <button className="vc-btn vc-btn-secondary" onClick={closeForm}>
-                    取消
-                  </button>
-                </div>
-              </div>
-            )}
           </div>
 
-          {/* Output */}
-          <div className="vc-card" style={{ flex: 1, display: "flex", flexDirection: "column" }}>
-            <div className="vc-card-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-              <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>Markdown 输出</h2>
-              {stats && (
-                <div style={{ display: "flex", gap: 8 }}>
-                  {[{ l: "消息", v: stats.msgs }, { l: "媒体", v: stats.media }, { l: "字符", v: stats.chars }].map(s => (
-                    <span key={s.l} style={{ fontSize: 12, color: "var(--vc-body)", background: "var(--vc-canvas-soft)", padding: "2px 8px", borderRadius: "var(--radius-sm)", border: "1px solid var(--vc-hairline)" }}>
-                      {s.l} <strong style={{ color: "var(--vc-ink)", fontWeight: 600 }}>{s.v}</strong>
-                    </span>
-                  ))}
+          {!output && (
+            <div style={{ textAlign: "center", padding: "40px 0" }}>
+              <i className="ti ti-markdown" style={{ fontSize: 32, color: "var(--vc-hairline-strong)", marginBottom: 12, display: "block" }} />
+              <p className="vc-hint">先在左侧点击「生成 Markdown」，然后再回到这里插入内容</p>
+            </div>
+          )}
+
+          {activeType && (
+            <div style={{ marginBottom: 16, padding: "16px", background: "var(--vc-canvas-soft)", borderRadius: "var(--radius-md)", border: `1px solid var(--vc-hairline)` }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
+                <span style={{ fontSize: 14, fontWeight: 500, color: activeType.color, display: "flex", alignItems: "center", gap: 6 }}>
+                  <i className={`ti ${activeType.icon}`} aria-hidden="true" />{activeType.label}
+                </span>
+                <span style={{ fontSize: 12, color: "var(--vc-mute)", maxWidth: 180, textAlign: "right" }}>{activeType.hint}</span>
+              </div>
+
+              <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+                {activeType.fields.map(f => (
+                  <div key={f.k}>
+                    <label className="vc-label">{f.label}</label>
+                    {f.type === "textarea"
+                      ? <textarea className="vc-textarea" rows={f.rows || 3} placeholder={f.ph}
+                          value={formData[f.k] || ""}
+                          onChange={e => setFormData(d => ({ ...d, [f.k]: e.target.value }))}
+                          style={{ resize: "vertical" }} />
+                      : <input className="vc-input" type="text" placeholder={f.ph}
+                          value={formData[f.k] || ""}
+                          onChange={e => setFormData(d => ({ ...d, [f.k]: e.target.value }))} />
+                    }
+                  </div>
+                ))}
+              </div>
+
+              {preview && (
+                <div style={{ marginTop: 16, padding: "12px", background: "var(--vc-canvas)", borderRadius: "var(--radius-md)", border: "1px solid var(--vc-hairline)" }}>
+                  <p style={{ fontSize: 11, color: "var(--vc-mute)", margin: "0 0 8px", textTransform: "uppercase", letterSpacing: "1px", fontWeight: 600 }}>预览</p>
+                  <pre style={{ fontSize: 12, fontFamily: "var(--font-sans)", color: "var(--vc-body)", margin: 0, whiteSpace: "pre-wrap", lineHeight: 1.6 }}>{preview}</pre>
                 </div>
               )}
+
+              <div style={{ display: "flex", gap: 12, marginTop: 16 }}>
+                <button className="vc-btn" onClick={doInsert}
+                  style={{ flex: 1, background: activeType.color, color: "#fff", border: "none", boxShadow: "none" }}>
+                  <i className="ti ti-plus" aria-hidden="true" />插入到光标位置
+                </button>
+                <button className="vc-btn vc-btn-secondary" onClick={closeForm}>取消</button>
+              </div>
             </div>
-            
-            <textarea ref={outputRef} className="vc-markdown-output" value={output} onChange={e => setOutput(e.target.value)}
-              onMouseUp={() => { if (outputRef.current) cursorRef.current = outputRef.current.selectionStart; }}
-              onKeyUp={() => { if (outputRef.current) cursorRef.current = outputRef.current.selectionStart; }}
-              placeholder={"生成后的 Markdown 会出现在这里\n\n先点「生成 Markdown」，然后在想插入的位置点击定位光标，再点上方媒体按钮填写内容…"}
-              style={{ flex: 1, resize: "vertical", marginBottom: 16, outline: "none", width: "100%", boxSizing: "border-box" }} />
-            
-            <button className="vc-btn vc-btn-primary" disabled={!output} onClick={downloadZip} style={{ width: "100%", opacity: output ? 1 : 0.4 }}>
-              <i className="ti ti-file-zip" aria-hidden="true" />打包下载归档文件夹 (.zip)
-            </button>
-          </div>
+          )}
+          
+          <textarea ref={outputRef} className="vc-markdown-output" value={output} onChange={e => setOutput(e.target.value)}
+            onMouseUp={() => { if (outputRef.current) cursorRef.current = outputRef.current.selectionStart; }}
+            onKeyUp={() => { if (outputRef.current) cursorRef.current = outputRef.current.selectionStart; }}
+            placeholder={"文稿区\n\n生成后的 Markdown 会出现在这里。\n\n你可以把光标放在任意空行处，点击上方的插入媒体按钮，一键补充音视频和图片…"}
+            style={{ flex: 1, resize: "vertical", marginBottom: 16, outline: "none", width: "100%", boxSizing: "border-box", border: "none", background: "transparent", padding: "0 4px", fontSize: 14, minHeight: 300 }} />
+          
+          <button className="vc-btn vc-btn-primary" disabled={!output} onClick={downloadZip} style={{ width: "100%", opacity: output ? 1 : 0.4 }}>
+            <i className="ti ti-file-zip" aria-hidden="true" />打包下载归档文件夹 (.zip)
+          </button>
         </div>
       </div>
     </div>
