@@ -294,7 +294,7 @@ export default function App() {
 
       <div className="app-grid">
         {/* Left */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           <div className="vc-card">
             <div className="vc-card-header" style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <h2 style={{ fontSize: 13, textTransform: "uppercase", letterSpacing: "1px", margin: 0, color: "var(--vc-mute)" }}>元数据</h2>
@@ -349,7 +349,7 @@ export default function App() {
             </div>
             <textarea ref={rawRef} className="vc-textarea" value={raw} onChange={e => setRaw(e.target.value)}
               placeholder={"从微信PC版复制粘贴聊天记录\n\n支持格式：\n顾问小王 10:02\n这个学校环境很好\n\n也可以直接粘贴手机纯文本：\n选中任意句子，点击上方极速标记按钮即可！"}
-              style={{ flex: 1, minHeight: 200, fontFamily: "var(--font-mono)", resize: "vertical", marginBottom: 16 }} />
+              style={{ flex: 1, minHeight: 200, fontFamily: "var(--font-mono)", resize: "vertical", marginBottom: 12 }} />
             <div style={{ display: "flex", gap: 12 }}>
               <button className="vc-btn vc-btn-primary" onClick={generate} style={{ flex: 1 }}>
                 <i className="ti ti-sparkles" aria-hidden="true" />生成 Markdown
@@ -362,7 +362,7 @@ export default function App() {
         </div>
 
         {/* Right */}
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
           {/* Media panel */}
           <div className="vc-card">
             <div className="vc-card-header">
@@ -395,7 +395,7 @@ export default function App() {
             {/* Inline form */}
             {activeType && (
               <div style={{ marginTop: 16, padding: "16px", background: "var(--vc-canvas-soft)", borderRadius: "var(--radius-md)", border: `1px solid var(--vc-hairline)` }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 16 }}>
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 12 }}>
                   <span style={{ fontSize: 14, fontWeight: 600, color: activeType.color, display: "flex", alignItems: "center", gap: 6 }}>
                     <i className={`ti ${activeType.icon}`} aria-hidden="true" />{activeType.label}
                   </span>

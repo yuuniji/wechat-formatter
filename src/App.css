@@ -3,7 +3,7 @@
 .app-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: 20px;
   align-items: start;
 }
 
@@ -20,8 +20,8 @@
 .form-row {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-bottom: 16px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 /* Custom scrollbar for textareas */

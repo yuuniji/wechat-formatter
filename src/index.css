@@ -84,12 +84,12 @@ p {
 .vc-page-container {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 40px 24px;
+  padding: 24px 16px;
 }
 
 .vc-header-band {
   text-align: center;
-  padding-bottom: 48px;
+  padding-bottom: 24px;
 }
 
 .vc-header-band h1 {
@@ -107,13 +107,13 @@ p {
   background: var(--vc-canvas);
   border: 1px solid var(--vc-hairline);
   border-radius: var(--radius-lg);
-  padding: 24px;
+  padding: 16px;
   box-shadow: 0px 1px 2px rgba(0,0,0,0.02);
 }
 
 .vc-card-header {
-  margin-bottom: 16px;
-  padding-bottom: 16px;
+  margin-bottom: 12px;
+  padding-bottom: 12px;
   border-bottom: 1px solid var(--vc-hairline);
 }
 
@@ -123,9 +123,9 @@ p {
   background: var(--vc-canvas);
   border: 1px solid var(--vc-hairline);
   border-radius: var(--radius-sm);
-  padding: 10px 12px;
+  padding: 8px 10px;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   color: var(--vc-ink);
   transition: border-color 0.15s ease;
   outline: none;
@@ -141,9 +141,9 @@ p {
 
 .vc-label {
   display: block;
-  font-size: 14px;
+  font-size: 12px;
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   color: var(--vc-ink);
 }
 
@@ -158,9 +158,9 @@ p {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  padding: 8px 16px;
+  padding: 6px 12px;
   font-family: var(--font-sans);
-  font-size: 14px;
+  font-size: 13px;
   font-weight: 500;
   border-radius: var(--radius-pill);
   cursor: pointer;
@@ -195,7 +195,7 @@ p {
 .vc-tag-group {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: 6px;
 }
 
 .vc-tag-label {
@@ -211,11 +211,11 @@ p {
 .vc-tag {
   display: inline-flex;
   align-items: center;
-  padding: 4px 12px;
+  padding: 3px 10px;
   border-radius: var(--radius-pill);
   background: var(--vc-canvas-soft-2);
   color: var(--vc-body);
-  font-size: 13px;
+  font-size: 12px;
   border: 1px solid var(--vc-hairline);
   transition: all 0.2s ease;
 }
