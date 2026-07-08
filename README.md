@@ -1,16 +1,73 @@
-# React + Vite
+# WeChat Formatter (微信聊天记录格式化工具)
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+WeChat Formatter 是一个**纯前端**的轻量级工具，专为解决微信“信息孤岛”问题而设计。它能够将从微信 PC 端杂乱复制的聊天记录，一键转化为**对大语言模型 (LLM) 和本地知识库高度友好的结构化 Markdown 归档文件夹**。
 
-Currently, two official plugins are available:
+没有任何后端服务器，绝对保护数据隐私。它是你构建“本地 AI 客户分析知识库”的最佳基础设施。
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+---
 
-## React Compiler
+## ✨ 核心特性
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **🔒 绝对隐私的纯前端架构**：基于 React + Vite 构建，所有数据处理均在本地浏览器内存中完成，无需担心聊天记录泄露。
+- **📦 标准化文件夹打包 (.zip)**：摒弃单薄的单文件导出，一键下载包含 `index.md` 和完备分类的 `assets/` 媒体资源库的 ZIP 压缩包。
+- **🏷️ 精准的 AI 标签体系**：预置了极其严格的参与者身份分类（如：`老板兼课程顾问`、`客户群体`等），以 YAML 格式注入文件头部，确保本地大模型的高维精准检索。
+- **🖼️ 优雅的多媒体路径映射**：内置图片、语音、视频、公众号文章、小程序、文件等 6 种富媒体占位符生成器。生成的 Markdown 代码天然指向打包好的相对路径（如 `![图片](assets/images/xxx.jpg)`）。
+- **⚡ 零摩擦解析**：无缝解析“人名 + 时间”的微信标准导出格式，自动剥离干扰信息。
 
-## Expanding the ESLint configuration
+## 🎯 为什么需要这个工具？
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+微信是一个典型的“围墙花园”，市面上大多数自动导出工具要么需要通过破解 SQLite 本地数据库（门槛极高），要么需要搭建微信机器人（极易面临封号风险）。
+
+WeChat Formatter 采用**“复制提取 + 规范组装”**的低摩擦策略：
+1. **规避风险**：完全不需要修改微信客户端或违规调用 API。
+2. **AI 原生**：它生成的每一行 Markdown 代码、每一个 YAML 标签、每一个文件夹结构，都是为了让你能够直接把它们喂给 Cursor、Ollama 或 AnythingLLM 等大语言模型进行“意图分析”和“知识图谱构建”。
+
+## 🚀 快速上手
+
+### 1. 本地运行开发环境
+确保你的电脑已安装 [Node.js](https://nodejs.org/) (推荐 18.x 或以上版本)。
+
+```bash
+# 1. 克隆项目到本地
+git clone https://github.com/yuuniji/wechat-formatter.git
+
+# 2. 进入项目目录
+cd wechat-formatter
+
+# 3. 安装依赖
+npm install
+
+# 4. 启动本地服务器
+npm run dev
+```
+
+### 2. 标准工作流指南
+1. **录入元数据**：在左上角选择“单聊 / 群聊”，填写聊天对象，并勾选此次对话涉及的所有**参与者身份**。
+2. **粘贴记录**：在微信 PC 端选中多条消息 -> 复制 -> 粘贴到工具左下角的“原始聊天记录”框中。
+3. **生成 Markdown**：点击生成按钮，右侧将出现结构化的对话代码。
+4. **插入富媒体**：在右侧点击上方对应的媒体按钮（如图片、小程序），填写描述，插入占位符代码。
+5. **打包下载**：点击底部的下载按钮，获取 `日期-类型-名称.zip` 归档包。
+6. **本地归档**：解压 ZIP 后，将你保存下来的真实微信图片、语音等文件，直接丢进 `assets/images/` 等对应子文件夹中。至此，一份标准的本地 AI 知识库素材就做好了！
+
+## 📂 导出的标准目录结构
+
+打包下载并解压后，你将获得完美对齐 Markdown 引用的标准目录树：
+
+```text
+📁 2026-07-08-单聊-张三 (自动基于元数据命名)
+ ├── 📄 index.md             # 包含 YAML 头和完整对话历史的 Markdown 文件
+ └── 📁 assets/              # 媒体资源库
+      ├── 📁 images/         # 存放聊天截图、图片
+      ├── 📁 voices/         # 存放语音导出的音频文件
+      ├── 📁 videos/         # 存放视频
+      └── 📁 files/          # 存放 PDF、Word 等文档
+```
+
+## 🛠️ 技术栈
+- **核心框架**: React 18
+- **构建工具**: Vite
+- **打包依赖**: [JSZip](https://stuk.github.io/jszip/) (纯浏览器端生成 ZIP 压缩包)
+- **UI 风格**: 现代化极简卡片流设计，CSS 原生变量控制，全量中文化。
+
+## 📄 开源协议
+MIT License
